@@ -8,7 +8,7 @@
 // ---------------------------------------------------------
 #define WIFI_SSID "Wokwi-GUEST"
 #define WIFI_PASS ""
-#define MQTT_BROKER "10.145.52.212" // Local Mosquitto server - hostname
+#define MQTT_BROKER "broker.emqx.io" // Public EMQX Broker - internet connection
 #define MQTT_PORT 1883
 #define MQTT_USERNAME "admin"
 #define MQTT_PASSWORD "123456789"
@@ -45,7 +45,7 @@
 // RUNTIME TIMING & INTERVALS
 // ---------------------------------------------------------
 #define INTERVAL_SENSOR_READ 5000     // 5 seconds
-#define INTERVAL_TELEMETRY   15000    // 15 seconds (Backend standard heartbeat)
+#define INTERVAL_TELEMETRY   5000     // 5 seconds (Reduced publish interval for high-frequency realtime telemetry)
 #define DEBOUNCE_DELAY       50       // 50ms for door sensor
 
 // ---------------------------------------------------------

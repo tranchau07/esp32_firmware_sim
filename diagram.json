@@ -4,64 +4,58 @@
   "editor": "wokwi",
   "parts": [
     { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 0, "left": 0, "attrs": {} },
-    { "type": "wokwi-dht22", "id": "dht", "top": -124.5, "left": 23.4, "attrs": {} },
-    { "type": "wokwi-pir-motion-sensor", "id": "pir", "top": -24.8, "left": -103.38, "attrs": {} },
+    { "type": "wokwi-dht22", "id": "dht", "top": -153.3, "left": -139.8, "attrs": {} },
+    { "type": "wokwi-pir-motion-sensor", "id": "pir", "top": -24.8, "left": -208.98, "attrs": {} },
     { "type": "wokwi-photoresistor-sensor", "id": "ldr", "top": 80, "left": -191.2, "attrs": {} },
     {
       "type": "wokwi-potentiometer",
       "id": "volt",
-      "top": -20.5,
-      "left": 115,
+      "top": -30.1,
+      "left": -96.2,
       "attrs": { "label": "Voltage" }
     },
     {
       "type": "wokwi-slide-switch",
       "id": "smoke",
       "top": 158,
-      "left": -121.7,
+      "left": -102.5,
       "attrs": { "label": "Smoke/MQ2" }
     },
     {
       "type": "wokwi-slide-switch",
       "id": "door",
-      "top": 206,
-      "left": -121.7,
+      "top": 158,
+      "left": -54.5,
       "attrs": { "label": "Door Sensor" }
     },
-    { "type": "wokwi-buzzer", "id": "buzzer", "top": 156, "left": 136.2, "attrs": {} },
-    {
-      "type": "wokwi-led",
-      "id": "ledMqtt",
-      "top": 246,
-      "left": 32.6,
-      "attrs": { "color": "blue" }
-    },
+    { "type": "wokwi-buzzer", "id": "buzzer", "top": 50.4, "left": 232.2, "attrs": {} },
+    { "type": "wokwi-led", "id": "ledMqtt", "top": 54, "left": 167, "attrs": { "color": "blue" } },
     {
       "type": "wokwi-led",
       "id": "ledEmergency",
-      "top": 294,
-      "left": 32.6,
+      "top": 54,
+      "left": 195.8,
       "attrs": { "color": "red" }
     },
     {
       "type": "wokwi-neopixel-matrix",
       "id": "strip",
-      "top": 72.48,
+      "top": -42.72,
       "left": 117.65,
       "attrs": { "rows": "4", "cols": "4" }
     },
     {
       "type": "wokwi-resistor",
       "id": "r1",
-      "top": 282.35,
-      "left": -19.2,
+      "top": 147.95,
+      "left": 134.4,
       "attrs": { "value": "1000" }
     },
     {
       "type": "wokwi-resistor",
       "id": "r2",
-      "top": 330.35,
-      "left": -19.2,
+      "top": 167.15,
+      "left": 134.4,
       "attrs": { "value": "1000" }
     }
   ],

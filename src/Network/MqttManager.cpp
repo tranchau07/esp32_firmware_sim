@@ -53,6 +53,13 @@ bool MqttManager::reconnectMqtt() {
     }
 }
 
+// Static variables for Deferred Command Execution & ACK to avoid re-entrancy in PubSubClient callback
+static bool hasPendingCommand = false;
+static CommandData pendingCommand;
+static bool hasPendingAck = false;
+static String pendingControlId = "";
+static String pendingStatus = "";
+
 void MqttManager::update() {
     if (!mqttClient.connected()) {
         actuators.setMqttLed(false);
@@ -65,6 +72,23 @@ void MqttManager::update() {
         }
     } else {
         mqttClient.loop();
+        
+        // Safely apply command outside the callback context in the main loop thread
+        if (hasPendingCommand) {
+            hasPendingCommand = false;
+            actuators.applySmartState(pendingCommand);
+            
+            // Trigger ACK to be sent next
+            pendingControlId = pendingCommand.controlId;
+            pendingStatus = "SUCCESS";
+            hasPendingAck = true;
+        }
+        
+        // Safely publish ACK outside the callback context
+        if (hasPendingAck && mqttClient.connected()) {
+            hasPendingAck = false;
+            publishAck(pendingControlId, pendingStatus);
+        }
     }
 }
 
@@ -112,21 +136,28 @@ void MqttManager::mqttCallback(char* topic, byte* payload, unsigned int length) 
         
         if (cmd.power == "CLEAR_FAULT") {
             autoEngine.clearEmergency();
-            mqttManager.publishAck(cmd.controlId, "SUCCESS");
+            pendingControlId = cmd.controlId;
+            pendingStatus = "SUCCESS";
+            hasPendingAck = true;
             return;
         }
 
         if (autoEngine.isEmergency()) {
             Serial.println("[MQTT] Ignored control command due to local EMERGENCY mode.");
-            mqttManager.publishAck(cmd.controlId, "FAILED");
+            pendingControlId = cmd.controlId;
+            pendingStatus = "FAILED";
+            hasPendingAck = true;
             return;
         }
 
         if (cmd.power == "ON" || cmd.power == "OFF") {
-            actuators.applySmartState(cmd);
-            mqttManager.publishAck(cmd.controlId, "SUCCESS");
+            // Defer command execution to the main loop context
+            pendingCommand = cmd;
+            hasPendingCommand = true;
         } else {
-            mqttManager.publishAck(cmd.controlId, "FAILED");
+            pendingControlId = cmd.controlId;
+            pendingStatus = "FAILED";
+            hasPendingAck = true;
         }
     }
 }

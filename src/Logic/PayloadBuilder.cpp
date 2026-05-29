@@ -1,7 +1,7 @@
 #include "PayloadBuilder.h"
 
 String PayloadBuilder::buildSensorPayload(const SensorData& data) {
-    StaticJsonDocument<512> doc;
+    DynamicJsonDocument doc(512);
     
     JsonObject env = doc.createNestedObject("environment");
     env["temperature"] = data.temperature;
@@ -20,7 +20,7 @@ String PayloadBuilder::buildSensorPayload(const SensorData& data) {
 }
 
 String PayloadBuilder::buildStatePayload(const String& powerStatus) {
-    StaticJsonDocument<1024 > doc;
+    DynamicJsonDocument doc(1024);
     doc["power"] = powerStatus;
     
     String output;
@@ -29,7 +29,7 @@ String PayloadBuilder::buildStatePayload(const String& powerStatus) {
 }
 
 String PayloadBuilder::buildAckPayload(const String& controlId, const String& status) {
-    StaticJsonDocument<1024 > doc;
+    DynamicJsonDocument doc(1024);
     doc["controlId"] = controlId;
     doc["status"] = status;
     
@@ -39,7 +39,7 @@ String PayloadBuilder::buildAckPayload(const String& controlId, const String& st
 }
 
 void PayloadBuilder::parseControlPayload(const String& payload, CommandData& outCommand) {
-    StaticJsonDocument<1024> doc;
+    DynamicJsonDocument doc(1024);
     DeserializationError error = deserializeJson(doc, payload);
     
     if (!error) {

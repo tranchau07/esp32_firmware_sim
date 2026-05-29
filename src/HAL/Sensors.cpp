@@ -11,10 +11,7 @@ void IRAM_ATTR Sensors::handleMotionInterrupt() {
 }
 
 void IRAM_ATTR Sensors::handleDoorInterrupt() {
-    if ((millis() - lastDoorDebounceTime) > DEBOUNCE_DELAY) {
-        doorFlag = true;
-        lastDoorDebounceTime = millis();
-    }
+    doorFlag = true;
 }
 
 void Sensors::init() {
@@ -48,7 +45,10 @@ void Sensors::update() {
     }
     
     if (doorFlag) {
-        currentData.doorOpen = digitalRead(PIN_DOOR);
+        if ((millis() - lastDoorDebounceTime) > DEBOUNCE_DELAY) {
+            currentData.doorOpen = digitalRead(PIN_DOOR);
+            lastDoorDebounceTime = millis();
+        }
         doorFlag = false;
     }
 

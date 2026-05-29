@@ -3,7 +3,9 @@
 Actuators actuators;
 
 void Actuators::init() {
-    strip = Adafruit_NeoPixel(NUM_PIXELS, PIN_NEOPIXEL, NEO_GRB + NEO_KHZ800);
+    strip.updateLength(NUM_PIXELS);
+    strip.setPin(PIN_NEOPIXEL);
+    strip.updateType(NEO_GRB + NEO_KHZ800);
     strip.begin();
     strip.show(); // Initialize all pixels to 'off'
 
