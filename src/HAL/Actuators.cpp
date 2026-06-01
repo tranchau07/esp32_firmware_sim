@@ -38,7 +38,14 @@ void Actuators::applySmartState(const CommandData& cmd) {
     // Map Fans (Index 8..14) - Max 7 Quạt
     for (int i = 0; i < 7; i++) {
         if (i < cmd.fanSpeeds.size() && cmd.fanSpeeds[i] > 0) {
-            strip.setPixelColor(i + 8, strip.Color(0, 255, 0)); // Green
+            int speed = cmd.fanSpeeds[i];
+            int brightness = 80; // default for speed 1
+            if (speed == 2) {
+                brightness = 160;
+            } else if (speed >= 3) {
+                brightness = 255;
+            }
+            strip.setPixelColor(i + 8, strip.Color(0, brightness, 0)); // Green with varying brightness
         } else {
             strip.setPixelColor(i + 8, strip.Color(0, 0, 0));
         }
@@ -47,6 +54,12 @@ void Actuators::applySmartState(const CommandData& cmd) {
     // Map AC (Index 15)
     if (cmd.acMode == "COOL") {
         strip.setPixelColor(15, strip.Color(0, 0, 255)); // Blue
+    } else if (cmd.acMode == "HEAT") {
+        strip.setPixelColor(15, strip.Color(255, 0, 0)); // Red
+    } else if (cmd.acMode == "FAN") {
+        strip.setPixelColor(15, strip.Color(0, 255, 0)); // Green
+    } else if (cmd.acMode == "DRY") {
+        strip.setPixelColor(15, strip.Color(255, 255, 0)); // Yellow
     } else if (cmd.acMode == "ECO") {
         strip.setPixelColor(15, strip.Color(0, 255, 255)); // Cyan
     } else {
